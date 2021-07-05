@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Products, Navbar } from './components'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import { Products, Navbar, Cart } from './components'
 import { commerce } from "./lib/commerce";
 
 
@@ -10,8 +11,8 @@ const App = () => {
 
     const fetchProducts = () => {
         commerce.products.list().then((products) => {
-                setProducts(products.data)
-            }).catch((err) => console.error(err))
+            setProducts(products.data)
+        }).catch((err) => console.error(err))
     }
     const fetchCart = async () => {
         setCart(await commerce.cart.retrieve())
@@ -32,10 +33,20 @@ const App = () => {
 
 
     return (
-        <div>
-            <Navbar/>
-            <Products products={products} onAddToCart={AddToCart}/>
-        </div>
+        <Router>
+            <div>
+                <Navbar totalItems={cart.total_items}/>
+                <Switch>
+                    <Route exact path='/'>
+                        <Products products={products} onAddToCart={AddToCart}/>
+                    </Route>
+                    <Route>
+                        <Cart exact path='/cart' cart={cart}/>
+                    </Route>
+                </Switch>
+
+            </div>
+        </Router>
     );
 }
 
