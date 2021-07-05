@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import { Products, Navbar } from './components'
+import { commerce } from "./lib/commerce";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+const App = () => {
+    const [products, setProducts] = useState([])
+    const [cart, setCart] = useState({})
+
+
+    const fetchProducts = () => {
+        commerce.products.list().then((products) => {
+                setProducts(products.data)
+            }).catch((err) => console.error(err))
+    }
+    const fetchCart = async () => {
+        setCart(await commerce.cart.retrieve())
+
+    }
+
+    const AddToCart = async (productId, quantity) => {
+        const item = await commerce.cart.add(productId, quantity)
+        setCart(item.cart)
+    }
+
+    useEffect(() => {
+        fetchProducts()
+        fetchCart()
+
+    }, []);
+    console.log('cart', cart)
+
+
+    return (
+        <div>
+            <Navbar/>
+            <Products products={products} onAddToCart={AddToCart}/>
+        </div>
+    );
 }
 
 export default App;
