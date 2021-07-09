@@ -8,7 +8,7 @@ const Cart = ({cart, handleCart, handleEmptyCart, deleteCart}) => {
     const classes = useStyles()
 
 
-    const EmptyCart = () => (
+    const renderEmptyCart = () => (
         <Typography variant={'subtitle1'}>Your Tech Atlas Cart is empty.<Link to='/' className={classes.link}>Time to start shopping</Link>!</Typography>
     )
 
@@ -29,7 +29,7 @@ const Cart = ({cart, handleCart, handleEmptyCart, deleteCart}) => {
                     <Button className={classes.emptyButton} size={'large'} type="button" variant="contained" color={'secondary'} onClick={handleEmptyCart}>
                         Empty Cart
                     </Button>
-                    <Button className={classes.checkoutButton} size={'large'} type="button" variant="contained" color={'primary'}>
+                    <Button className={classes.checkoutButton} component={Link}to='/checkout'  size={'large'} type="button" variant="contained" color={'primary'}>
                         Checkout
                     </Button>
                 </div>
@@ -42,7 +42,7 @@ const Cart = ({cart, handleCart, handleEmptyCart, deleteCart}) => {
         <Container>
             <div className={classes.toolbar}/>
             <Typography className={classes.title} variant={'h3'} gutterBottom>Your Shopping Cart</Typography>
-            {!cart.line_items.length ? <EmptyCart /> : <FilledCart /> }
+            {!cart.line_items.length ? renderEmptyCart() : FilledCart() }
         </Container>
     );
 }

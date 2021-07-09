@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import { Products, Navbar, Cart } from './components'
+import { Products, Navbar, Cart, Checkout } from './components'
 import { commerce } from "./lib/commerce";
 
 
 const App = () => {
     const [products, setProducts] = useState([])
-    const [cart, setCart] = useState({})
+    const [cart, setCart] = useState({
+    })
 
 
     const fetchProducts = () => {
@@ -43,7 +44,7 @@ const App = () => {
         fetchCart()
 
     }, []);
-    console.log('cart', cart)
+    // console.log('cart', cart)
 
 
     return (
@@ -54,11 +55,13 @@ const App = () => {
                     <Route exact path='/'>
                         <Products products={products} onAddToCart={AddToCart}/>
                     </Route>
-                    <Route>
-                        <Cart exact path='/cart' cart={cart} handleCart={handleCart} deleteCart={deleteCart} handleEmptyCart={handleEmptyCart}/>
+                    <Route exact path='/cart'>
+                        <Cart cart={cart} handleCart={handleCart} deleteCart={deleteCart} handleEmptyCart={handleEmptyCart}/>
+                    </Route>
+                    <Route exact path="/checkout" >
+                        <Checkout cart={cart} />
                     </Route>
                 </Switch>
-
             </div>
         </Router>
     );
